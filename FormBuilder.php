@@ -1,32 +1,23 @@
 <?php
 
- include 'DataHandler.php';
- $base = new BaseData();
- $base->connect();
+ 
+class HTML {
 
 
-class HTML{
-/*	function PlaceCookie(){
-		if (isset($_COOKIE["user"])){
-			echo "Welcome " . $_COOKIE["user"] . "!<br />";
-		} else { 
-			//header('Location:Sign-In.php');
-			$user = "";
-			setcookie("user", $user, time()+3600);
-		}
-	}*/
+	protected $basedata = NULL;
+
+	public function __construct(BaseData $object) {
+		$this->basedata = $object;
+	}
 
 //builds post to display on page
 	function buildPage() {
-
-		$base = new BaseData();
-		
 
 //build the event HTML
 		$HTMLbody ='<h3>Here are what other people have suggested so far:</h3><br>
 			<div class="poll">
 			';
-		foreach ($base->displayDynamic() as $event) {
+		foreach ($this->basedata->displayDynamic() as $event) {
 			
 			$HTMLbody .= $this->buildEvent($event);
 		}
@@ -39,8 +30,8 @@ class HTML{
 //build the post HTML
 			$HTMLbody.= '<div>Make a blog post or comment on a post.<br>
 			';
-		foreach ($base->getPosts(10) as $post) {
-			$comments = $base->getComments($post['ID']);
+		foreach ($this->basedata->getPosts(10) as $post) {
+			$comments = $this->basedata->getComments($post['ID']);
 			$HTMLbody .= $this->buildPost($post, $comments);
 		}
 		$HTMLbody .= '

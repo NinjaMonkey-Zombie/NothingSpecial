@@ -2,26 +2,31 @@
 
 class BaseData {
 
-	var $host = 'localhost';
-	var $username = 'shanem';
-	var $password = 'pa55w0rd';
-	var $table = 'Posts';
-	var $table2 = 'Comments';
-	var $table3 = 'Event';
-	var $table4 = 'Users';
-	var $database = 'BlogDB';
+
+	 private $db_info = array();
+
+	/**
+	* @param array $db_params This will hold db connection info from DB.php
+	*/
+	public function __construct(array $db_params)
+	{
+		foreach($db_params as $key => $value)
+		{
+			$this->db_info[$key] = $value;
+		}
+	}
 
 //connect to DB
 	public function connect() {
 	
-	mysql_connect($this->host, $this->username, $this->password) or die ("Could not connect. " .mysql_error());
-	mysql_select_db($this->database) or die ("Could not find database. " .mysql_error());
+	mysql_connect($this->db_info['host'], $this->db_info['username'], $this->db_info['password']) or die ("Could not connect. " .mysql_error());
+	mysql_select_db($this->db_info['database']) or die ("Could not find database. " .mysql_error());
 	
 	}
 
 //create an array for Event table
 	public function displayDynamic() {
-		$qry = mysql_query("SELECT * FROM {$this->table3} ORDER BY ID DESC");
+		$qry = mysql_query("SELECT * FROM {$this->db_info['table3']} ORDER BY ID DESC");
 		if (!$qry)
 			return array();
 
@@ -35,7 +40,7 @@ class BaseData {
 
 //create an array for Posts table
 	public function getPosts($limit = 10) {
-		$r = mysql_query("SELECT * FROM {$this->table} ORDER BY created DESC LIMIT {$limit}");
+		$r = mysql_query("SELECT * FROM {$this->db_info['table']} ORDER BY created DESC LIMIT {$limit}");
 		if (!$r)
 			return array();
 
@@ -48,7 +53,7 @@ class BaseData {
 	
 //create an array for Comments table
 	public function getComments($postId) {
-		$r = mysql_query("SELECT * FROM {$this->table2} WHERE postId={$postId} ORDER BY created");
+		$r = mysql_query("SELECT * FROM {$this->db_info['table2']} WHERE postId={$postId} ORDER BY created DESC LIMIT 5");
 		if (!$r)
 			return array();
 		
@@ -78,11 +83,11 @@ class BaseData {
 			$IPaddress = ipcheck();
 			if ($p['PostNum'] == '0') {
 					
-				$sql = "INSERT INTO {$this->table} VALUES(DEFAULT,'$blogHandle','$blogPost','$created','$IPaddress')";	
+				$sql = "INSERT INTO {$this->db_info['table']} VALUES(DEFAULT,'$blogHandle','$blogPost','$created','$IPaddress')";	
 				return mysql_query($sql);	
 			} else {
 				$postId = ($p['PostNum']);
-				$sql = "INSERT INTO {$this->table2} VALUES(DEFAULT,'$blogHandle','$blogPost','$created','$postId','$IPaddress')";	
+				$sql = "INSERT INTO {$this->db_info['table2']} VALUES(DEFAULT,'$blogHandle','$blogPost','$created','$postId','$IPaddress')";	
 				return mysql_query($sql);		
 			}
 
@@ -100,7 +105,7 @@ class BaseData {
 	
 		if (!empty($game) && !empty($description) && $game !== 'Event Name' && $description !== 'Describe The Event') {
 			$IPaddress = ipcheck();
-			$sql = "INSERT INTO {$this->table3} VALUES(DEFAULT,'$game','$description','$IPaddress')";
+			$sql = "INSERT INTO {$this->db_info['table3']} VALUES(DEFAULT,'$game','$description','$IPaddress')";
 			return mysql_query($sql);
 		}
 
@@ -120,45 +125,18 @@ class BaseData {
 			}
 
 			if (!empty($name) && !empty($email) && !empty($pswd)) {
-				$verify = mysql_query("SELECT * FROM {$this->$table4}");				
+				$verify = mysql_query("SELECT * FROM {$table4}");				
 			
 				while ($v = mysql_fetch_assoc($verify)) {
 					if ($v['Name'] == $name || $v['Email'] == $email)
 						return false;
 				}	
 			}
-			$sql = "INSERT INTO {$this->table4} VALUES(DEFAULT,'$name','$email','$pswd',DEFAULT)";
+			$sql = "INSERT INTO {$this->db_info['table4']} VALUES(DEFAULT,'$name','$email','$pswd',DEFAULT)";
 			return mysql_query($sql);
 		} else {
 			return	false;	
 		}
-
-
 	}
-
-
-
 }
-
-$DBHandle = new BaseData();
-
-if ($_POST) {
-	
-	$DBHandle->connect();
-	$DBHandle->tablePost($_POST);				
-
-	header('Location:ZombieBlog.php');
-
-}
-
-
-function ipcheck() {
-
-	$ip = $_SERVER['REMOTE_ADDR'];
-	return $ip;
-
-}
-
-
-
 ?>

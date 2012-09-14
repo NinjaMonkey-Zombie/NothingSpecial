@@ -1,8 +1,31 @@
 <?php
 
+include 'DB.php';
+include 'DataHandler.php';
 include 'FormBuilder.php';
-$HTML = new HTML();
-//$HTML->PlaceCookie();
+
+$dbparams = array(
+	 'host' => _host,
+	 'username' => _username,
+	 'password' => _password,
+	 'table' => _table,
+	 'table2' => _table2,
+	 'table3' => _table3,
+	 'table4' => _table4,
+	 'database' => _database);
+
+//Build DB handle
+$DBHandle = new BaseData($dbparams);
+$DBHandle->connect();
+
+//Get HTML view and pass in db info
+$HTML = new HTML($DBHandle);
+
+//If this is a post on this page
+if ($_POST) {
+	$DBHandle->tablePost($_POST);				
+}
+
 ?>
 
 
@@ -24,7 +47,7 @@ $HTML = new HTML();
 
 
 		<div class="left">
-			<img src="images/nemcompr_37.gif"/><br><br>
+		
 			<img class="banner" height="289" width="200" src="images/zombie1.jpg"/>
 			<p class="banner">
 			We want YOU....</br>
@@ -34,7 +57,7 @@ $HTML = new HTML();
 		</div>
 
 		<div class="right">
-			<img src="images/zombie-5.gif"/>
+										
 			<img class="banner" height="150" width="200" src="images/ILoveZomies.png"/><br><br>
 			<img class="banner" height="200" width="200" src="images/Smiley.png"/>
 
@@ -50,7 +73,7 @@ $HTML = new HTML();
 
 		  <p class="center">
 
-			<form id="poll" name="eventPoll" action="DataHandler.php" method="post">
+			<form id="poll" name="eventPoll" action="" method="post">
 				</br></br>
 				<h3>The Zombie Olympics Are Coming!</h3>
 				Place your vote!<br>
