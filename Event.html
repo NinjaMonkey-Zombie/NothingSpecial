@@ -1,0 +1,33 @@
+<!--Display Event Page-->
+        <div id="DynHTML">
+		<div id="Event">
+			<form id="poll" name="eventPoll" action="EventHandler.php" method="post">
+				<div class="announcement">
+					<h2>Your one-stop place for all upcoming zombie events!</h2>
+				</div><br>
+				<div class="announcement">
+					<p>Currently we are investigating all zombie related events that are worthy of posting on this site.  If you have any information on upcoming or worthy past events, please post the information in the blog until we have finished with setting up the site.  If you have suggestions on events, please post them in the Events forum and tell us about it.<br>
+					Thank You<br>
+					-ZombieBlog Staff
+					</p>
+				</div>
+					<h3>The Zombie Olympics Are Coming!</h3>
+				<div class="announcement">
+					<p>Place your vote!<br>
+					What events would you most like to see at the Zombie Olympics?</p>
+					<input type="text" name="game" id="game" class="textinput" value="Event Name"/><br /><br />
+					<textarea class="textinput" name="description" id="description">Describe The Event</textarea>
+					<br><br>
+					<input type="submit" class="button" value="Submit Event"/><br><br>
+				</div>
+			</form>
+
+			<h3>Here are what other people have suggested so far:</h3><br>
+			<div class="poll">
+
+					%%%DBE_Fill%%%
+
+
+			</div>
+		</div>
+        </div>

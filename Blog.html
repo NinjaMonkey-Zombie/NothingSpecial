@@ -1,0 +1,43 @@
+<!--Display Blog Page-->
+<div id="DynHTML">
+    <div  id="BPost" class="BPost">\
+
+            <div class="announcement">
+                    Post any and all zombie relevant stuff here.<br>
+                    Please check out our Events Forum and give some event ideas.
+                    <br>
+            </div><br>  
+
+            <div>
+                <button id="make_post" class="button">Create a New Post</button>
+                    <br><br>
+
+                    %%%DBB_Info%%%
+                    	
+            </div>
+            
+            
+        <!--blog Input Modal-->
+            <div  class="inputCont" id="inputCont">
+
+                    <div class="announcement">	
+                            <div class="close">
+                                    <button class="button" id="close">[X]</button>
+                            </div>
+                            <form id="container" name="zombieBlog" action="BlogHandler.php" method="post">
+                                    <input class="hidden" type="hidden" id="PostNum" name="PostNum" value="0"/>
+                                    <p class="center">User Handle:</br>
+                                    <input class="textinput" type="text" name="handle" id="handle" value=""/>
+                                    </br></br>
+                                    Post: </p>
+                                    <textarea class="textinput" name="body" id="body"></textarea>
+                                    <br /><br />
+                                    <input class="button" id="Blogbtn" type="submit" value="Create Entry"/>
+                            </form>
+                    </div>
+
+            </div>
+            
+    </div>
+
+</div>

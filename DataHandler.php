@@ -25,8 +25,8 @@ class BaseData {
 	}
 
 //create an array for Event table
-	public function displayDynamic() {
-		$qry = mysql_query("SELECT * FROM {$this->db_info['table3']} ORDER BY ID DESC");
+	public function displayDynamic($limit = 20) {
+		$qry = mysql_query("SELECT * FROM {$this->db_info['table3']} ORDER BY ID DESC LIMIT {$limit}");
 		if (!$qry)
 			return array();
 
@@ -67,20 +67,17 @@ class BaseData {
 //post data into DB
 	public function tablePost($p) {
 
-	$IPaddress = "";  //IP of the poster
-
 	//blog post DB posting
-		if ($p['handle']) {
+		if (isset($p['handle'])) {
 			$blogHandle = mysql_real_escape_string($p['handle']);
 		}
 
-		if ($p['body']) {
+		if (isset($p['body'])) {
 			$blogPost = mysql_real_escape_string($p['body']);
 		}	
 	
 		if (!empty($blogHandle) && !empty($blogPost)) {
 			$created = date("m-d-Y, H:i:s");
-			$IPaddress = ipcheck();
 			if ($p['PostNum'] == '0') {
 					
 				$sql = "INSERT INTO {$this->db_info['table']} VALUES(DEFAULT,'$blogHandle','$blogPost','$created','$IPaddress')";	
@@ -95,23 +92,21 @@ class BaseData {
 		}
 
 //event DB posting
-		if ($p['game']) {
+		if (isset($p['game'])) {
 			$game = mysql_real_escape_string($p['game']);
 		}
 
-		if ($p['description']) {
+		if (isset($p['description'])) {
 			$description = mysql_real_escape_string($p['description']);
 		}	
 	
 		if (!empty($game) && !empty($description) && $game !== 'Event Name' && $description !== 'Describe The Event') {
-			$IPaddress = ipcheck();
 			$sql = "INSERT INTO {$this->db_info['table3']} VALUES(DEFAULT,'$game','$description','$IPaddress')";
 			return mysql_query($sql);
 		}
-
+                
 //login creation posting
-		if ($p['create'] == 1) {
-
+		if (isset($p['create']) == 1) {
 			if ($p['name']) {
 				$name = mysql_real_escape_string($p['name']);
 			}
@@ -125,8 +120,8 @@ class BaseData {
 			}
 
 			if (!empty($name) && !empty($email) && !empty($pswd)) {
-				$verify = mysql_query("SELECT * FROM {$table4}");				
-			
+				$verify = mysql_query("SELECT * FROM {$this->db_info['table4']}");				
+		
 				while ($v = mysql_fetch_assoc($verify)) {
 					if ($v['Name'] == $name || $v['Email'] == $email)
 						return false;
